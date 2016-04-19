@@ -1,0 +1,24 @@
+gitlab-server:
+  ports:
+  - ${gitlab_ssh_port}:22/tcp
+  - ${gitlab_http_port}:80/tcp
+  - ${gitlab_https_port}:443/tcp
+  labels:
+    io.rancher.sidekicks: gitlab-data
+  hostname: ${gitlab_hostname}
+  image: gitlab/gitlab-ce:${version}-ce.0
+  volumes_from:
+  - gitlab-data
+
+gitlab-data:
+  labels:
+    io.rancher.container.start_once: 'true'
+  entrypoint:
+  - /bin/true
+  hostname: gitdata
+  image: gitlab/gitlab-ce:${version}-ce.0
+  volumes:
+  - /etc/gitlab
+  - /var/log/gitlab
+  - /var/opt/gitlab
+
